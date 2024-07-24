@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#Define a function for both use cases
+
+function update() {
+if [ $1 = "y" ] || [ $1 = "Y" ]; then
+    dnf check-update --refresh --enablerepo=updates-testing
+    sudo dnf upgrade --refresh --enablerepo=updates-testing
+elif [ $1 = "n" ] || [ $1 = "N" ]; then
+    dnf check-update --refresh
+    sudo dnf upgrade --refresh 
+fi
+
+}
+
+
+
+#Read statement to take repo preference 
+read -p "Do you want to use updates-testing as well? [y/N] " upd_test
+
+
+#Fallback against improper inputs
+
+until [ "$upd_test" = "y" -o "$upd_test" = "n" -o "$upd_test" = "N" -o "$upd_test" = "Y" ]; do
+
+    echo "You did not enter a correct input. Please try again!"
+    read -p "Do you want to use updates-testing as well? [y/N] " upd_test
+    echo $upd_test
+
+done
+update $upd_test
+
+
+
